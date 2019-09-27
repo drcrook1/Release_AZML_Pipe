@@ -1,0 +1,67 @@
+pipeline:
+    name: MyPipeline
+    parameters: #literal parameters
+        FileOnBlobToProcess:
+            type: str
+            default: "None"
+    data_references:
+        DataPath1:
+            datastore: workspaceblobstore
+            path_on_datastore: azureml/f4cd79f1-d88a-4017-bda9-ef335553f695/output
+    default_compute: compute1 # use this compute for step, unless it's customized
+    steps:
+        Step1:
+            module:
+                name: "TestModuleName"
+            compute: amlalexka2
+            runconfig: "yaml/default_runconfig.yml"
+            arguments:
+            - "--input"
+            - input:InputData
+            - "--output"
+            - output:OutputData
+            - "--param"
+            - parameter:my_parameter
+            parameters:
+                my_parameter:
+                    source: PipelineParam1
+            runconfig_parameters:
+                NodeCount:
+                    source: node_count_graph_param
+            inputs:
+                InputData:
+                    source: MyDataParam
+                    type: mount
+            outputs:
+                OutputData:
+                    destination: KindOfPipelineData1
+                    datastore: workspaceblobstore
+                    type: upload
+                    path_on_compute: "path"
+                    overwrite: true
+        Step2:
+            module:
+                name: "TestModuleName"
+                version: "1"
+            parameters:
+                my_parameter: "yaml_submitted_value_step2"
+            arguments:
+            - "--input"
+            - input:InputData
+            inputs:
+                InputData:
+                    source: KindOfPipelineData1
+                    type: download
+                    path_on_compute: "path1"
+                    overwrite: false
+        Step3:
+            module:
+                name: "TestModuleTwoInputs"
+            arguments:
+            - "--input"
+            inputs:
+                InputData1:
+                    source: SQLData1
+                InputData2:
+                    source: DataPath1
+                    type: download

@@ -33,6 +33,33 @@
       "metadata" : {
         "description": "Name for the compute cluster to create"
       }
+    },
+    "minNodeCount": {
+      "type" : "int",
+      "defaultValue" : 0,
+      "metadata" : {
+        "description" : "minimum node count for the compute cluster."
+      }
+    },
+    "maxNodeCount": {
+      "type" : "int",
+      "defaultValue": 4,
+      "metadata": {
+        "description" : "maximum node count for the compute cluster."
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS1_v2",
+      "metadata": {
+        "description" : "Azure vm size to use for each node in compute cluster."
+      }
+    },
+    "clusterAdminUserName" : {
+      "type": "string"
+    },
+    "clusterAdminUserPassword" : {
+      "type": "string"
     }
   },
   "variables": {
@@ -133,6 +160,9 @@
       "name": "[concat(variables('amlWorkspaceName'), '/', parameters('clusterName'))]",
       "apiVersion": "2018-11-19",
       "location" : "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.MachineLearningServices/workspaces', variables('amlWorkspaceName'))]"
+      ],
       "properties": {
           "computeType": "AmlCompute",
           "computeLocation" : "[parameters('location')]",
@@ -146,12 +176,8 @@
               },
               "userAccountCredentials" : 
               {
-                  "adminUserName" : "[parameters('adminUserName')]",
-                  "adminUserPassword" : "[parameters('adminUserPassword')]"
-              },
-              "subnet" :
-              {
-                  "id" : "[parameters('subnetId')]"
+                  "adminUserName" : "[parameters('clusterAdminUserName')]",
+                  "adminUserPassword" : "[parameters('clusterAdminUserPassword')]"
               }
           }                
       }
