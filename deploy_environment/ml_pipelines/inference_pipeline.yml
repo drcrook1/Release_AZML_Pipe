@@ -1,67 +1,62 @@
 pipeline:
     name: MyPipeline
-    parameters: #literal parameters
-        FileOnBlobToProcess:
-            type: str
-            default: "None"
+    parameters: # pipeline execution level parameters which can be changed run by run
+        preprocess_num_buckets:
+            type: int
+            default: 5
     data_references:
-        DataPath1:
-            datastore: workspaceblobstore
-            path_on_datastore: azureml/f4cd79f1-d88a-4017-bda9-ef335553f695/output
-    default_compute: compute1 # use this compute for step, unless it's customized
+        RawDataPath:
+            datastore: inputstore
+            path_on_datastore: rawdata
+        ProcessedDataPath:
+            datastore: outputstore
+            path_on_datastore: processed
+        PredictionsPath:
+            datastore: predictions
+            path_on_datastore: predictions
+    default_compute: cpu # Value comes from arm template creation
     steps:
         Step1:
-            module:
-                name: "TestModuleName"
-            compute: amlalexka2
-            runconfig: "yaml/default_runconfig.yml"
-            arguments:
-            - "--input"
-            - input:InputData
-            - "--output"
-            - output:OutputData
-            - "--param"
-            - parameter:my_parameter
-            parameters:
-                my_parameter:
-                    source: PipelineParam1
-            runconfig_parameters:
-                NodeCount:
-                    source: node_count_graph_param
+            compute: cpu
+            runconfig: "../src/Inference_Pipeline/run_config.yml" #in relation to current working directory
             inputs:
                 InputData:
-                    source: MyDataParam
+                    source: inputstore
                     type: mount
             outputs:
                 OutputData:
-                    destination: KindOfPipelineData1
-                    datastore: workspaceblobstore
-                    type: upload
-                    path_on_compute: "path"
-                    overwrite: true
+                    destination: ProcessedData #made up name for reference in future steps
+                    datastore: outputstore
+                    type: mount
+            arguments: #permanently affixed to a pipeline
+            - "input_mount_path"
+            - input:InputData #colon notation says; look at the yaml area before colon and find sub item after colon.
+            - "output_mount_path"
+            - output:OutputData
+            python_script_step:
+                name: "Featurize"
+                script_name: "pre_process.py" #in relation to source_directory
+                source_directory: "../src/Inference_Pipeline/" #in relation to current working directory
+                allow_reuse: true
         Step2:
-            module:
-                name: "TestModuleName"
-                version: "1"
-            parameters:
-                my_parameter: "yaml_submitted_value_step2"
-            arguments:
-            - "--input"
-            - input:InputData
+            compute: cpu
+            runconfig: "../src/Inference_Pipeline/run_config.yml" #in relation to current working directory
             inputs:
                 InputData:
-                    source: KindOfPipelineData1
-                    type: download
-                    path_on_compute: "path1"
-                    overwrite: false
-        Step3:
-            module:
-                name: "TestModuleTwoInputs"
-            arguments:
-            - "--input"
-            inputs:
-                InputData1:
-                    source: SQLData1
-                InputData2:
-                    source: DataPath1
-                    type: download
+                    source: ProcessedData #from the made up name in step1's output data
+                    type: mount
+            outputs:
+                OutputData:
+                    destination: Predictions #made up name for reference in future steps
+                    datastore: predictions
+                    type: mount
+            arguments: #permanently affixed to a pipeline
+            - "input_mount_path"
+            - input:InputData #colon notation says; look at the yaml area before colon and find sub item after colon.
+            - "output_mount_path"
+            - output:OutputData
+            python_script_step:
+                name: "Featurize"
+                script_name: "pre_process.py" #in relation to source_directory
+                source_directory: "../src/Inference_Pipeline/" #in relation to current working directory
+                allow_reuse: true

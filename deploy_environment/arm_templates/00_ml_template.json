@@ -95,7 +95,33 @@
           "keySource": "Microsoft.Storage"
         },
         "supportsHttpsTrafficOnly": true
-      }
+      },
+      "resources": [
+        {
+          "name": "default/rawdata",
+          "type": "blobServices/containers",
+          "apiVersion": "2018-07-01",
+          "dependsOn": [
+            "[variables('storageAccountName')]"
+          ]
+        },
+        {
+          "name": "default/processeddata",
+          "type": "blobServices/containers",
+          "apiVersion": "2018-07-01",
+          "dependsOn": [
+            "[variables('storageAccountName')]"
+          ]
+        },
+        {
+          "name": "default/predictions",
+          "type": "blobServices/containers",
+          "apiVersion": "2018-07-01",
+          "dependsOn": [
+            "[variables('storageAccountName')]"
+          ]
+        }
+      ]
     },
     {
       "type": "Microsoft.KeyVault/vaults",
