@@ -21,18 +21,23 @@ pipeline:
             runconfig: "../src/Inference_Pipeline/run_config.yml" #in relation to current working directory
             inputs:
                 InputData:
-                    source: inputstore
+                    source: RawDataPath
                     type: mount
             outputs:
                 OutputData:
                     destination: ProcessedData #made up name for reference in future steps
                     datastore: outputstore
                     type: mount
+            parameters:
+                num_buckets:
+                    source: preprocess_num_buckets
             arguments: #permanently affixed to a pipeline
             - "input_mount_path"
             - input:InputData #colon notation says; look at the yaml area before colon and find sub item after colon.
             - "output_mount_path"
             - output:OutputData
+            - "num_buckets"
+            - parameter:num_buckets
             python_script_step:
                 name: "Featurize"
                 script_name: "pre_process.py" #in relation to source_directory
@@ -56,7 +61,7 @@ pipeline:
             - "output_mount_path"
             - output:OutputData
             python_script_step:
-                name: "Featurize"
-                script_name: "pre_process.py" #in relation to source_directory
+                name: "Score"
+                script_name: "score.py" #in relation to source_directory
                 source_directory: "../src/Inference_Pipeline/" #in relation to current working directory
                 allow_reuse: true
