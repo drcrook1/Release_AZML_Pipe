@@ -32,11 +32,11 @@ pipeline:
                 num_buckets:
                     source: preprocess_num_buckets
             arguments: #permanently affixed to a pipeline
-            - "input_mount_path"
+            - "--input_mount_path"
             - input:InputData #colon notation says; look at the yaml area before colon and find sub item after colon.
-            - "output_mount_path"
+            - "--output_mount_path"
             - output:OutputData
-            - "num_buckets"
+            - "--num_buckets"
             - parameter:num_buckets
             python_script_step:
                 name: "Featurize"
@@ -56,9 +56,9 @@ pipeline:
                     datastore: predictions
                     type: mount
             arguments: #permanently affixed to a pipeline
-            - "input_mount_path"
+            - "--input_mount_path"
             - input:InputData #colon notation says; look at the yaml area before colon and find sub item after colon.
-            - "output_mount_path"
+            - "--output_mount_path"
             - output:OutputData
             python_script_step:
                 name: "Score"

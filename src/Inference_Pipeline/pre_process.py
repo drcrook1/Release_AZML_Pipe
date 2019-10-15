@@ -5,9 +5,9 @@ import numpy as np
 import logging
 
 parser = argparse.ArgumentParser()
-parser.add_argument("num_buckets", type=int)
-parser.add_argument("input_mount_path", type=str)
-parser.add_argument("output_mount_path", type=str)
+parser.add_argument("--num_buckets", type=int)
+parser.add_argument("--input_mount_path", type=str)
+parser.add_argument("--output_mount_path", type=str)
 args = parser.parse_args()
 
 log_vars_str = "num_buckets: {} - input_mount_path: {} - output_mount_path: {}".format(

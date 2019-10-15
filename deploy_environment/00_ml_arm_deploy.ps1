@@ -1,18 +1,18 @@
-$resourceGroupName = "dacrook-test-arm"
+$resourceGroupName = "dacrook-test-arm" # $RESOURCE_GROUP
 $location = "eastus"
 $templateParamObject = @{
     "baseName" = "dacrook"
     "clusterAdminUserName" = "dacrook123"
-    "clusterAdminUserPassword" = "D@vid!234567890"
+    "clusterAdminUserPassword" = "D@vid!234567890" #$clusterAdminUserPassword
     "clusterName" = "cpu"
     "minNodeCount" = 0
 }
-$parameters = @{
-    "Name" = "dacrookamlarmtest"
-    "ResourceGroupName" = $resourceGroupName
-    "TemplateFile" = "./arm_templates/00_ml_template.json"
-    "TemplateParameterObject" = $templateParamObject
-}
+# $parameters = @{
+#     "Name" = "dacrookamlarmtest"
+#     "ResourceGroupName" = $resourceGroupName
+#     "TemplateFile" = "./arm_templates/00_ml_template.json"
+#     "TemplateParameterObject" = $templateParamObject
+# }
 Login-AzureRmAccount
 Select-AzureRmSubscription -SubscriptionName "jayoung-Team Subscription"
 
