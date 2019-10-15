@@ -5,7 +5,7 @@ $templateParamObject = @{
     "clusterAdminUserName" = "dacrook123"
     "clusterAdminUserPassword" = "D@vid!234567890" #$clusterAdminUserPassword
     "clusterName" = "cpu"
-    "minNodeCount" = 0
+    "minNodeCount" = 1
 }
 # $parameters = @{
 #     "Name" = "dacrookamlarmtest"

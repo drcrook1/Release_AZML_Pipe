@@ -7,13 +7,13 @@ pipeline:
     data_references:
         RawDataPath:
             datastore: inputstore
-            path_on_datastore: rawdata
+            path_on_datastore: "/"
         ProcessedDataPath:
             datastore: outputstore
-            path_on_datastore: processed
+            path_on_datastore: "/"
         PredictionsPath:
             datastore: predictions
-            path_on_datastore: predictions
+            path_on_datastore: "/"
     default_compute: cpu # Value comes from arm template creation
     steps:
         Step1:
