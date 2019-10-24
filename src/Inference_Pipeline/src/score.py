@@ -12,7 +12,7 @@ args = parser.parse_args()
 
 THRESHOLD = 10
 
-data = np.load(os.path.join(args.input_mount_path, "processed.npz"))
+data = np.load(os.path.join(args.input_mount_path, "processed.npy"))
 
 def classify(x : int):
     if x > 10:
@@ -20,8 +20,9 @@ def classify(x : int):
     return False
 
 predictions = {}
-predictions["predictions"] = [classify(x) for x in data]
+predictions["predictions"] = [classify(x) for x in data.reshape(-1)]
 
+os.makedirs(args.output_mount_path) #need to create output path first
 with open(os.path.join(args.output_mount_path, "predictions.json"), "w") as outfile:
     json.dump(predictions, outfile)
 

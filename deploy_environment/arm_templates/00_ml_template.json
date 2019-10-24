@@ -70,7 +70,8 @@
     "tenantId": "[subscription().tenantId]",
     "applicationInsightsName": "[concat(parameters('baseName'),'-AML-AI')]",
     "containerRegistryName": "[concat(toLower(parameters('baseName')),'amlcr')]",
-    "amlComputeName": "[concat(toLower(parameters('baseName')), 'amlcompute')]"
+    "amlComputeName": "[concat(toLower(parameters('baseName')), 'amlcompute')]",
+    "custom_docker_registry": "[concat(toLower(parameters('baseName')), 'customacr')]"
   },
   "resources": [
     {
@@ -206,6 +207,19 @@
                   "adminUserPassword" : "[parameters('clusterAdminUserPassword')]"
               }
           }                
+      }
+    },
+    {
+      "name": "[variables('custom_docker_registry')]",
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2017-10-01",
+      "location": "[parameters('location')]",
+      "comments": "Container registry for storing docker images",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "adminUserEnabled": true
       }
     }
   ],

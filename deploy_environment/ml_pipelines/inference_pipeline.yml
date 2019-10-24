@@ -18,7 +18,7 @@ pipeline:
     steps:
         Step1:
             compute: cpu
-            runconfig: "../src/Inference_Pipeline/run_config.yml" #in relation to current working directory
+            runconfig: "../src/Inference_Pipeline/src/run_config.yml" #in relation to current working directory
             inputs:
                 InputData:
                     source: RawDataPath
@@ -41,11 +41,11 @@ pipeline:
             python_script_step:
                 name: "Featurize"
                 script_name: "pre_process.py" #in relation to source_directory
-                source_directory: "../src/Inference_Pipeline/" #in relation to current working directory
+                source_directory: "../src/Inference_Pipeline/src/" #in relation to current working directory
                 allow_reuse: true
         Step2:
             compute: cpu
-            runconfig: "../src/Inference_Pipeline/run_config.yml" #in relation to current working directory
+            runconfig: "../src/Inference_Pipeline/src/run_config.yml" #in relation to current working directory
             inputs:
                 InputData:
                     source: ProcessedData #from the made up name in step1's output data
@@ -63,5 +63,5 @@ pipeline:
             python_script_step:
                 name: "Score"
                 script_name: "score.py" #in relation to source_directory
-                source_directory: "../src/Inference_Pipeline/" #in relation to current working directory
+                source_directory: "../src/Inference_Pipeline/src/" #in relation to current working directory
                 allow_reuse: true

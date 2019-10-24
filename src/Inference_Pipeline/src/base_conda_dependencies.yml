@@ -18,7 +18,8 @@ dependencies:
 
 - pip:
     # Required packages for AzureML execution, history, and data preparation.
-
+  - --extra-index-url {{#PACKAGE_URL#}}
+  - {{#PACKAGE_NAME#}}
   - azureml-defaults
   - tensorflow
   - keras

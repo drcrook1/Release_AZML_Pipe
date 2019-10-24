@@ -1,0 +1,2 @@
+include README.md LICENSE.txt
+include src/mypackage/ml_assets/*.json
